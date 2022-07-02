@@ -1,4 +1,4 @@
-package destinations
+package routes
 
 import "time"
 
@@ -10,6 +10,7 @@ type ConnectionList struct {
 }
 
 type ConnectionPart struct {
-	Label string `json:"label"`
-	Delay int64  `json:"delay"`
+	Label             string `json:"label"`
+	Delay             int64  `json:"delay"`
+	DeparturePlatform string `json:"departurePlatform"`
 }

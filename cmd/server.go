@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bahnhof/pkg/station"
 	"bahnhof/routes"
 	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
@@ -13,7 +15,8 @@ func main() {
 	server()
 }
 func bot() {
-	bot, err := tgbotapi.NewBotAPI("5235943255:AAGKXu9H2ou_xn7YgPXyaIItVTqRe8Ax7EQ")
+	token := os.Getenv("token")
+	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
 		log.Panic(err)
 	}
@@ -30,7 +33,7 @@ func bot() {
 		if update.Message.Text == "/home" { // If we got a message
 			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
-			msg := tgbotapi.NewMessage(update.Message.Chat.ID, routes.HomeRoute())
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, routes.RouteFinder(station.Work.ID, station.Home.ID))
 			msg.ReplyToMessageID = update.Message.MessageID
 
 			bot.Send(msg)
@@ -38,7 +41,7 @@ func bot() {
 		if update.Message.Text == "/work" { // If we got a message
 			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
-			msg := tgbotapi.NewMessage(update.Message.Chat.ID, routes.WorkRoute())
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, routes.RouteFinder(station.Home.ID, station.Work.ID))
 			msg.ReplyToMessageID = update.Message.MessageID
 
 			bot.Send(msg)
@@ -47,18 +50,16 @@ func bot() {
 }
 
 func server() {
+	_ = godotenv.Load()
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "9090"
 	}
 	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
-		fmt.Fprintf(writer, "test")
+		_, _ = fmt.Fprintf(writer, "test")
 	})
-	http.HandleFunc("/route", routes.RouteFinder)
-	http.HandleFunc("/start", func(writer http.ResponseWriter, request *http.Request) {
-		go bot()
-	})
-	fmt.Print("test")
+	//http.HandleFunc("/route", routes.RouteFinder)
+	go bot()
 	http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
 	return
 }
