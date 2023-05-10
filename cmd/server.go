@@ -53,8 +53,9 @@ func server() {
 	_ = godotenv.Load()
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "9090"
+		port = "9070"
 	}
+	log.Printf("Server started on port %s", port)
 	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
 		_, _ = fmt.Fprintf(writer, "test")
 	})

@@ -18,5 +18,5 @@ var HomeDestinaion = Departure{
 
 var WorkDestinaion = Departure{
 	Label:       "S8",
-	Destination: "Herrsching",
+	Destination: "Ostbahnhof",
 }

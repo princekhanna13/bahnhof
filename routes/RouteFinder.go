@@ -32,5 +32,5 @@ func RouteFinder(fromID string, toID string) string {
 		newTime := d.DepartureTime.Add(time.Minute * time.Duration(d.ConnectionPartList[0].Delay))
 		return fmt.Sprintf("Train time : %s\nTrain Number : %s\nDelay : %v minutes\nPlatform: %s", newTime.Format(time.Kitchen), d.ConnectionPartList[0].Label, d.ConnectionPartList[0].Delay, d.ConnectionPartList[0].DeparturePlatform)
 	}
-	return "Not Route available"
+	return "No Route available"
 }
